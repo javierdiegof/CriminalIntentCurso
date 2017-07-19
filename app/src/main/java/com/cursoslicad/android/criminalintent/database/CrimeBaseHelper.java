@@ -1,10 +1,8 @@
-package com.cursoslicad.android.criminalintent;
+package com.cursoslicad.android.criminalintent.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.cursoslicad.android.criminalintent.CrimeDbSchema.CrimeTable;
 
 /**
  * Created by javier on 7/18/17.
@@ -20,12 +18,12 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        db.execSQL("CREATE TABLE " + CrimeTable.NAME
+        db.execSQL("CREATE TABLE " + CrimeDbSchema.CrimeTable.NAME
                 + "(" + "_id integer primary key autoincrement, " +
-                CrimeTable.Cols.UUID + ", " +
-                CrimeTable.Cols.TITLE + ", " +
-                CrimeTable.Cols.DATE + ", "  +
-                CrimeTable.Cols.SOLVED +  ")"
+                CrimeDbSchema.CrimeTable.Cols.UUID + ", " +
+                CrimeDbSchema.CrimeTable.Cols.TITLE + ", " +
+                CrimeDbSchema.CrimeTable.Cols.DATE + ", "  +
+                CrimeDbSchema.CrimeTable.Cols.SOLVED +  ")"
 
         );
 

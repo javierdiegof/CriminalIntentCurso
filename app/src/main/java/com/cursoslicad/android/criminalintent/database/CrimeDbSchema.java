@@ -1,4 +1,4 @@
-package com.cursoslicad.android.criminalintent;
+package com.cursoslicad.android.criminalintent.database;
 
 /**
  * Created by javier on 7/18/17.

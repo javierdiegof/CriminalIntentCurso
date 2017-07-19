@@ -1,9 +1,9 @@
-package com.cursoslicad.android.criminalintent;
+package com.cursoslicad.android.criminalintent.database;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.cursoslicad.android.criminalintent.CrimeDbSchema.CrimeTable;
+import com.cursoslicad.android.criminalintent.Crime;
 
 import java.util.Date;
 import java.util.UUID;
@@ -20,10 +20,10 @@ public class CrimeCursorWrapper extends CursorWrapper {
 
 
     public Crime getCrime(){
-        String uuidString = getString(getColumnIndex(CrimeTable.Cols.UUID));
-        String title = getString(getColumnIndex(CrimeTable.Cols.TITLE));
-        long date = getLong(getColumnIndex(CrimeTable.Cols.DATE));
-        int isSolved = getInt(getColumnIndex(CrimeTable.Cols.SOLVED));
+        String uuidString = getString(getColumnIndex(CrimeDbSchema.CrimeTable.Cols.UUID));
+        String title = getString(getColumnIndex(CrimeDbSchema.CrimeTable.Cols.TITLE));
+        long date = getLong(getColumnIndex(CrimeDbSchema.CrimeTable.Cols.DATE));
+        int isSolved = getInt(getColumnIndex(CrimeDbSchema.CrimeTable.Cols.SOLVED));
 
 
         Crime crime = new Crime(UUID.fromString(uuidString));
