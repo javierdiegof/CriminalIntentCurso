@@ -43,6 +43,7 @@ public class CrimeListFragment extends Fragment {
 
         public CrimeHolder(View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
             mTitleTextView = (TextView)
                     itemView.findViewById(R.id.list_item_crime_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
@@ -58,6 +59,7 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v){
+            Log.d(TAG, "Click!");
             Toast.makeText(getActivity(),
                     mCrime.getTitle() + "click!" , Toast.LENGTH_SHORT).show();
         }
