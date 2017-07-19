@@ -20,6 +20,8 @@ public class Crime {
         mDate = new Date();
     }
 
+
+
     public UUID getId() {
         return mId;
     }
