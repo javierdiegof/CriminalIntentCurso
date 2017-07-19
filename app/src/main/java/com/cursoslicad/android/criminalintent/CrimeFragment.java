@@ -1,6 +1,7 @@
 package com.cursoslicad.android.criminalintent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -44,6 +45,15 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedCheckBox;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
+    private Callbacks mCallbacks;
+
+    /**
+     * La actividad que aloje a CrimeFragment debe de implementarlo forzosamente
+     * */
+    public interface Callbacks{
+        void onCrimeUpdated();
+    }
+
 
 
     // Falso constructor al que se le pasa el ID del crimen desde el Intent
@@ -55,6 +65,13 @@ public class CrimeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
 
 
 
@@ -71,6 +88,13 @@ public class CrimeFragment extends Fragment {
         super.onPause();
         CrimeLab.get(getActivity()).updateCrime(mCrime);
     }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        mCallbacks = null;
+    }
+
 
 
     @Override
@@ -90,6 +114,7 @@ public class CrimeFragment extends Fragment {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         // Qué hacer cuando el texto ha cambiado
                         mCrime.setTitle(s.toString());
+                        updateCrime();
                     }
 
                     @Override
@@ -122,6 +147,7 @@ public class CrimeFragment extends Fragment {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         // Coloca en el modelo el valor del CheckBox
                         mCrime.setSolved(isChecked);
+                        updateCrime();
                     }
                 }
         );
@@ -171,6 +197,7 @@ public class CrimeFragment extends Fragment {
         if(requestCode == REQUEST_DATE){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
+            updateCrime();
             updateDate();
         }
         else if(requestCode == REQUEST_PHOTO){
@@ -178,10 +205,17 @@ public class CrimeFragment extends Fragment {
                     "com.cursoslicad.android.criminalintent.fileprovider",mPhotoFile);
             getActivity().revokeUriPermission(uri,
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            updateCrime();
             updatePhotoView();
         }
 
     }
+
+    private void updateCrime(){
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated();
+    }
+
 
     private void updateDate() {
         mDateButton.setText(mCrime.getDate().toString());

@@ -1,5 +1,6 @@
 package com.cursoslicad.android.criminalintent;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,23 @@ public class CrimeListFragment extends Fragment {
     public static final String TAG = "CrimeListFragment";
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private Callbacks mCallbacks;
+
+    /**
+     * Interfaz que deben de implementar las actividades que alojan los elementos
+     * El casting de la actividad padre forza a que la actividad que aloja al fragment
+     * implemente la interfaz Callbacks
+     * */
+    public interface Callbacks{
+        void onCrimeSelected(Crime crime);
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +82,8 @@ public class CrimeListFragment extends Fragment {
             case R.id.menu_item_new_crime:
                 Crime crime = new Crime();
                 CrimeLab.get(getActivity()).addCrime(crime);
-                Intent intent = CrimeActivity.newIntent(getActivity(), crime.getId());
-                startActivity(intent);
+                updateUI();
+                mCallbacks.onCrimeSelected(crime);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,8 +119,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View v){
             Log.d(TAG, "Click!");
-            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
-            startActivity(intent);
+            mCallbacks.onCrimeSelected(mCrime);
         }
 
 
@@ -154,7 +171,7 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
-    private void updateUI(){
+    public void updateUI(){
         CrimeLab crimelab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimelab.getCrimes();
 
@@ -167,5 +184,12 @@ public class CrimeListFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        mCallbacks = null;
+    }
+
 
 }

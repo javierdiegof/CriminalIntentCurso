@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 import java.util.UUID;
 
-public class CrimeActivity extends SingleFragmentActivity {
+public class CrimeActivity extends SingleFragmentActivity implements CrimeFragment.Callbacks {
     private static final String EXTRA_CRIME_ID = "com.cursoslicad.android.criminalintent.crime_id";
 
     public static Intent newIntent(Context packageContext, UUID crimeId){
@@ -23,5 +23,9 @@ public class CrimeActivity extends SingleFragmentActivity {
         UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
         return CrimeFragment.newInstance(crimeId);
     }
+
+    @Override
+    public void onCrimeUpdated(){}
+
 }
 
